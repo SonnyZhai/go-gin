@@ -1,0 +1,19 @@
+[app]
+port = 18080
+app_name = "Go-Gin"
+app_url = "http://localhost"
+
+[app.env]
+name = "development"
+debug = true
+
+[log]
+log_level = "debug"
+root_dir = "./storage/logs"
+filename = "app.log"
+format = "josn"
+show_line = true
+max_backups = 3
+max_size = 500
+max_age = 28
+compress = true
