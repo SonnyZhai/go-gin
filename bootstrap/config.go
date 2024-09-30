@@ -1,7 +1,7 @@
 package bootstrap
 
 import (
-	"fmt"
+	"go-gin/cons"
 	"go-gin/global"
 	"log"
 	"os"
@@ -15,47 +15,47 @@ func InitializeConfig() *viper.Viper {
 	v := viper.New()
 
 	// 优先读取环境变量指定的配置文件路径
-	configPath := os.Getenv("CONFIG_PATH")
+	configPath := os.Getenv(cons.CONFIG_PATH)
 	if configPath != "" {
 		v.SetConfigFile(configPath)
 	} else {
 		// 根据APP_ENV环境变量加载相应的配置文件
-		env := os.Getenv("APP_ENV")
+		env := os.Getenv(cons.APP_ENV)
 		switch env {
-		case "prod":
-			v.SetConfigName("config.prod")
-			v.SetConfigType("yaml")
+		case cons.ENV_PROD:
+			v.SetConfigName(cons.CONFIG_PROD)
+			v.SetConfigType(cons.YAML_TYPE)
 			//. 表示当前目录，也就是项目根目录
-			v.AddConfigPath(".")
-		case "test":
-			v.SetConfigName("config.test")
-			v.SetConfigType("yaml")
-			v.AddConfigPath(".")
+			v.AddConfigPath(cons.DOT)
+		case cons.ENV_TEST:
+			v.SetConfigName(cons.CONFIG_TEST)
+			v.SetConfigType(cons.YAML_TYPE)
+			v.AddConfigPath(cons.DOT)
 		default:
-			v.SetConfigName("settings")
-			v.SetConfigType("toml")
-			v.AddConfigPath(".")
+			v.SetConfigName(cons.CONFIG_DEV)
+			v.SetConfigType(cons.TOML_TYPE)
+			v.AddConfigPath(cons.DOT)
 		}
 	}
 
 	// 读取配置文件
 	if err := v.ReadInConfig(); err != nil {
-		log.Fatalf("读取配置文件失败: %s", err)
+		log.Fatalf(cons.FATAL_READ_CONFIG+cons.STRING_PLACEHOLDER, err)
 	}
 
 	// 监听配置文件变化
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
-		fmt.Println("配置文件已修改并重新加载", in.Name)
+		log.Println(cons.INFO_MODIFY_CONFIG, in.Name)
 		// 重新加载配置文件
 		if err := v.Unmarshal(&global.App.Config); err != nil {
-			fmt.Println("重新加载配置文件失败: ", err)
+			log.Println(cons.ERROR_RELOAD_CONFIG, err)
 		}
 	})
 
 	// 将配置赋值给全局变量
 	if err := v.Unmarshal(&global.App.Config); err != nil {
-		log.Fatalf("配置赋值给全局变量失败: %s", err)
+		log.Fatalf(cons.FATAL_CONFIG_TO_GLOBAL+cons.STRING_PLACEHOLDER, err)
 	}
 
 	return v
