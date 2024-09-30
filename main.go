@@ -2,6 +2,7 @@ package main
 
 import (
 	"go-gin/bootstrap"
+	"go-gin/cons"
 	"go-gin/global"
 	"strconv"
 
@@ -11,6 +12,10 @@ import (
 func main() {
 	// 初始化配置文件
 	bootstrap.InitializeConfig()
+
+	// 初始化日志
+	global.App.Log = bootstrap.InitializeLog()
+	global.App.Log.Info(cons.INFO_LOG_INIT_SUCCESS)
 
 	// 创建一个默认的路由引擎
 	r := gin.Default()
@@ -23,6 +28,6 @@ func main() {
 	})
 
 	// 启动服务
-	r.Run(":" + strconv.Itoa(global.App.Config.App.Port))
+	r.Run(cons.COLON + strconv.Itoa(global.App.Config.App.Port))
 
 }
