@@ -17,6 +17,17 @@ func main() {
 	global.App.Log = bootstrap.InitializeLog()
 	global.App.Log.Info(cons.INFO_LOG_INIT_SUCCESS)
 
+	// 初始化数据库
+	global.App.DB = bootstrap.InitializeDB()
+	global.App.Log.Info("数据库初始化成功")
+	// 程序关闭前，释放数据库连接
+	defer func() {
+		if global.App.DB != nil {
+			db, _ := global.App.DB.DB()
+			db.Close()
+		}
+	}()
+
 	// 创建一个默认的路由引擎
 	r := gin.Default()
 

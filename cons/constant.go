@@ -60,6 +60,9 @@ const (
 	// 致命信息输出相关
 	FATAL_READ_CONFIG      = "读取配置文件失败: "
 	FATAL_CONFIG_TO_GLOBAL = "配置赋值给全局变量失败: "
+	FATAL_DB_CONNECT       = "数据库连接失败: "
+	FATAL_DECODE_POSTGRES  = "解码PostgreSQL配置失败: "
+	FATAL_DECODE_MYSQL     = "解码MySQL配置失败: "
 
 	// 错误信息输出相关
 	ERROR_MYSQL_DB_CONNECT    = "Mysql数据库连接失败: "
@@ -68,6 +71,7 @@ const (
 	ERROR_READ_CONFIG         = "读取配置文件失败: "
 	ERROR_RELOAD_CONFIG       = "重新加载配置文件失败: "
 	ERROR_DB_TYPE_UNSUPPORT   = "不支持的数据库类型: "
+	ERROR_DB_MIGRATE          = "数据库迁移失败: "
 
 	// 信息打印相关
 	INFO_READ_CONFIG      = "读取配置文件成功: "

@@ -2,6 +2,7 @@ package bootstrap
 
 import (
 	"fmt"
+	"go-gin/app/models"
 	"go-gin/cons"
 	"go-gin/global"
 	"io"
@@ -19,18 +20,40 @@ import (
 	"gorm.io/gorm/schema"
 )
 
-var DB *gorm.DB
+// 数据库初始化
+func InitializeDB() *gorm.DB {
+	// 定义一个错误变量
+	var err error
+	var db *gorm.DB
+
+	// 根据配置文件选择数据库类型
+	switch global.App.Config.Database {
+	case cons.DATABASE_TYPE_MYSQL:
+		db, err = initMysqlGorm()
+	case cons.DATABASE_TYPE_POSTGRESQL:
+		db, err = initPostgresGorm()
+	default:
+		global.App.Log.Fatal(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, zap.String("dbType", global.App.Config.Database))
+	}
+
+	// 如果有错误则输出错误信息
+	if err != nil {
+		global.App.Log.Fatal(cons.FATAL_DB_CONNECT, zap.Any("err", err))
+	}
+
+	return db
+}
 
 // 初始化 mysql gorm.DB
-func initMysqlGorm() error {
+func initMysqlGorm() (*gorm.DB, error) {
 	return initGorm(cons.DATABASE_TYPE_MYSQL)
 }
 
-func initPostgresGorm() error {
+func initPostgresGorm() (*gorm.DB, error) {
 	return initGorm(cons.DATABASE_TYPE_POSTGRESQL)
 }
 
-func initGorm(dbType string) error {
+func initGorm(dbType string) (*gorm.DB, error) {
 
 	// 根据数据库类型选择配置
 	var dsn string
@@ -43,9 +66,8 @@ func initGorm(dbType string) error {
 
 		// 是否有数据库配置
 		if dbConfig.Database == "" {
-			// 没有配置则直接返回
-			fmt.Errorf(cons.ERROR_DB_CONFIG_DBNAME)
-			return nil
+			// 没有配置则直接返回,数据库配置错误
+			return nil, fmt.Errorf(cons.ERROR_DB_CONFIG_DBNAME)
 		}
 
 		// 数据库配置
@@ -69,8 +91,14 @@ func initGorm(dbType string) error {
 		})
 		if err != nil {
 			global.App.Log.Error(cons.ERROR_MYSQL_DB_CONNECT, zap.Any("err", err))
-			return err
+			return nil, err
 		}
+
+		// 连接池配置
+		configConnectionPool(db, cons.DATABASE_TYPE_MYSQL)
+
+		return db, nil
+
 	case cons.DATABASE_TYPE_POSTGRESQL:
 		// 获取 PostgreSQL 数据库配置
 		dbConfig := global.App.Config.PostgresDB
@@ -78,32 +106,86 @@ func initGorm(dbType string) error {
 		// 是否有数据库配置
 		if dbConfig.Host == "" {
 			// 没有配置则直接返回
-			fmt.Errorf(cons.ERROR_DB_CONFIG_DBNAME)
-			return nil
+			return nil, fmt.Errorf(cons.ERROR_DB_CONFIG_DBNAME)
 		}
 
 		// 数据库配置
 		dsn = fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%d sslmode=%s TimeZone=%s",
 			dbConfig.Host, dbConfig.User, dbConfig.Password, dbConfig.Dbname, dbConfig.Port, dbConfig.Sslmode, dbConfig.TimeZone)
 
-		if db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+		db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
 			DisableForeignKeyConstraintWhenMigrating: true,                                         // 禁用自动创建外键约束
 			Logger:                                   getGormLogger(cons.DATABASE_TYPE_POSTGRESQL), // 使用自定义 Logger
 			NamingStrategy: schema.NamingStrategy{
 				TablePrefix:   cons.DATABASE_POSTGRESQL_TABLE_PREFIX, // 表名前缀，`Article` 的表名应该是 `t_articles`
 				SingularTable: true,                                  // 使用单数表名，启用该选项后，`Article` 的表名应该是 `t_article`
 			},
-		}); err != nil {
+		})
+		if err != nil {
 			global.App.Log.Error(cons.ERROR_POSTGRES_DB_CONNECT, zap.Any("err", err))
-			return err
-		} else {
-			sqlDB, _ := db.DB()
-			sqlDB.SetMaxIdleConns(dbConfig.MaxIdleConns)
-			sqlDB.SetMaxOpenConns(dbConfig.MaxOpenConns)
-			return
+			return nil, err
 		}
+
+		// 连接池配置
+		configConnectionPool(db, cons.DATABASE_TYPE_POSTGRESQL)
+
+		return db, nil
+
 	default:
 		return nil, fmt.Errorf(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, dbType)
+	}
+}
+
+// 数据库连接池配置
+func configConnectionPool(db *gorm.DB, dbType string) {
+
+	// 根据数据库类型选择配置
+	switch dbType {
+	case cons.DATABASE_TYPE_MYSQL:
+		// 获取 MySQL 数据库配置
+		dbConfig := global.App.Config.MysqlDB
+
+		// 连接池配置
+		sqlDB, err := db.DB()
+		if err != nil {
+			global.App.Log.Error(cons.ERROR_MYSQL_DB_CONNECT, zap.Any("err", err))
+			return
+		}
+		sqlDB.SetMaxIdleConns(dbConfig.MaxIdleConns) // SetMaxIdleConns 用于设置连接池中空闲连接的最大数量
+		sqlDB.SetMaxOpenConns(dbConfig.MaxOpenConns) // SetMaxOpenConns 设置打开数据库连接的最大数量
+
+	case cons.DATABASE_TYPE_POSTGRESQL:
+		// 获取 PostgreSQL 数据库配置
+		dbConfig := global.App.Config.PostgresDB
+
+		// 连接池配置
+		sqlDB, err := db.DB()
+		if err != nil {
+			global.App.Log.Error(cons.ERROR_POSTGRES_DB_CONNECT, zap.Any("err", err))
+			return
+		}
+		sqlDB.SetMaxIdleConns(dbConfig.MaxIdleConns) // SetMaxIdleConns 用于设置连接池中空闲连接的最大数量
+		sqlDB.SetMaxOpenConns(dbConfig.MaxOpenConns) // SetMaxOpenConns 设置打开数据库连接的最大数量
+
+	default:
+		fmt.Printf(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, dbType)
+		return // 不支持的数据库类型
+	}
+
+	// 数据库表初始化
+	initTable(db)
+}
+
+// 数据库表初始化
+func initTable(db *gorm.DB) {
+
+	// 自动迁移
+	err := db.AutoMigrate(
+		models.User{},
+	)
+	if err != nil {
+		global.App.Log.Error(cons.ERROR_DB_MIGRATE, zap.Any("err", err))
+		os.Exit(0)
 	}
 }
 

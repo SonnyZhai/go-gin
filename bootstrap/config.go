@@ -58,5 +58,24 @@ func InitializeConfig() *viper.Viper {
 		log.Fatalf(cons.FATAL_CONFIG_TO_GLOBAL+cons.STRING_PLACEHOLDER, err)
 	}
 
+	// 加载数据库配置
+	loadDatabaseConfig(v)
+
 	return v
+}
+
+// 根据database字段值加载相应的数据库配置
+func loadDatabaseConfig(v *viper.Viper) {
+	switch global.App.Config.Database {
+	case cons.DATABASE_TYPE_POSTGRESQL:
+		if err := v.UnmarshalKey(cons.DATABASE_TYPE_POSTGRESQL, &global.App.Config.PostgresDB); err != nil {
+			log.Fatalf(cons.FATAL_DECODE_POSTGRES+cons.STRING_PLACEHOLDER, err)
+		}
+	case cons.DATABASE_TYPE_MYSQL:
+		if err := v.UnmarshalKey(cons.DATABASE_TYPE_MYSQL, &global.App.Config.MysqlDB); err != nil {
+			log.Fatalf(cons.FATAL_DECODE_MYSQL+cons.STRING_PLACEHOLDER, err)
+		}
+	default:
+		log.Fatalf(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, global.App.Config.Database)
+	}
 }

@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
+	"gorm.io/gorm"
 )
 
 // 定义 Application 结构体，用来存放一些项目启动时的变量，便于调用
@@ -15,6 +16,8 @@ type Application struct {
 	Config config.Configuration
 	// Log 用来存放 zap.Logger 实例
 	Log *zap.Logger
+	// DB 用来存放 gorm.DB 实例
+	DB *gorm.DB
 }
 
 var App = new(Application)
