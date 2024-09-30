@@ -1,3 +1,5 @@
+database = "postgres"
+
 [app]
 port = 18080
 app_name = "Go-Gin"
@@ -8,10 +10,10 @@ name = "development"
 debug = true
 
 [log]
-log_level = "debug"
+level = "debug"
 root_dir = "./storage/logs"
 filename = "app.log"
-format = "josn"
+format = "json"
 show_line = true
 max_backups = 3
 max_size = 500

@@ -17,6 +17,8 @@ log:
   max_age: 28 # 旧文件的最大保留天数
   compress: true # 是否压缩
 
+database: mysql
+
 mysql: # 数据库配置
   driver: mysql # 数据库驱动
   host: 146.56.117.12
