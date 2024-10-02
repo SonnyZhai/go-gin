@@ -1,6 +1,8 @@
 package models
 
-import "time"
+import (
+	"go-gin/global"
+)
 
 // 自增ID主键
 type ID struct {
@@ -9,13 +11,13 @@ type ID struct {
 
 // 时间
 type Timestamp struct {
-	CreatedAt time.Time `gorm:"autoCreateTime" json:"create_time" form:"create_time"`
-	UpdatedAt time.Time `gorm:"autoUpdateTime" json:"update_time" form:"update_time"`
+	CreatedAt global.Time `gorm:"autoCreateTime;type:timestamp" json:"create_time" form:"create_time"`
+	UpdatedAt global.Time `gorm:"autoUpdateTime;type:timestamp" json:"update_time" form:"update_time"`
 }
 
 // 软删除
 type SoftDelete struct {
-	DeletedAt time.Time `gorm:"index" json:"delete_time" form:"delete_time"`
+	DeletedAt global.Time `gorm:"index;type:timestamp" json:"-" form:"delete_time"`
 }
 
 // 分页

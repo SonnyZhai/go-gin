@@ -19,3 +19,10 @@ func ValidateEmail(fl validator.FieldLevel) bool {
 	ok, _ := regexp.MatchString(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`, email)
 	return ok
 }
+
+// CustomValidatorUsername 自定义用户名校验
+// 用户名，手机号，邮箱三者必须满足其中一个
+func CustomValidatorUsername(fl validator.FieldLevel) bool {
+	username := fl.Field().String()
+	return ValidateMobile(fl) || ValidateEmail(fl) || len(username) > 0
+}
