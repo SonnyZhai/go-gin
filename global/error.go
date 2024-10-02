@@ -25,7 +25,7 @@ func (e *CustomError) WithContext(key string, value interface{}) *CustomError {
 }
 
 // NewCustomError 创建新的自定义错误
-func NewCustomError(code cons.ErrorCode, message string, httpStatus int, err error) *CustomError {
+func NewCustomError(httpStatus int, code cons.ErrorCode, message string, err error) *CustomError {
 	return &CustomError{
 		HTTPStatus:   httpStatus,
 		InternalCode: code,

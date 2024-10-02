@@ -53,8 +53,11 @@ const (
 	ERROR_CODE_SERVER_USER_UNAUTHORIZED      ErrorCode = 10100 + iota // 用户未认证
 	ERROR_CODE_SERVER_USER_FORBIDDEN                                  // 用户未授权
 	ERROR_CODE_SERVER_USER_INVALID_TOKEN                              // 用户令牌无效
+	ERROR_CODE_SERVER_USER_FAILED_TOKEN                               // 创建用户令牌失败
 	ERROR_CODE_SERVER_USER_INVALID_SESSION                            // 用户会话无效
 	ERROR_CODE_SERVER_USER_INVALID_COOKIE                             // 用户 Cookie 无效
+	ERROR_CODE_SERVER_REGISTER_FAILED                                 // 用户注册失败
+	ERROR_CODE_SERVER_LOGIN_FAILED                                    // 用户登录失败
 	ERROR_CODE_SERVER_USER_OPERATION_FAILED                           // 用户操作失败
 	ERROR_CODE_SERVER_USER_TOO_MANY_REQUESTS                          // 用户请求过多
 

@@ -1,6 +1,12 @@
 package response
 
-import "go-gin/global"
+import (
+	"go-gin/cons"
+	"go-gin/global"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
 
 type Response struct {
 	Code int         `json:"code"`
@@ -12,7 +18,7 @@ type Response struct {
 func newSuccessResponse(data interface{}) Response {
 	return Response{
 		Code: 0,
-		Msg:  "Success",
+		Msg:  cons.API_SUCCESS,
 		Data: data,
 	}
 }
@@ -21,17 +27,17 @@ func newSuccessResponse(data interface{}) Response {
 func newFailResponse(err *global.CustomError) Response {
 	return Response{
 		Code: 1,
-		Msg:  "failed",
+		Msg:  cons.API_FAILED,
 		Data: err,
 	}
 }
 
 // Success 响应成功
-func Success(data interface{}) Response {
-	return newSuccessResponse(data)
+func Success(c *gin.Context, data interface{}) {
+	c.JSON(http.StatusOK, newSuccessResponse(data))
 }
 
 // Fail 响应失败
-func Fail(err *global.CustomError) Response {
-	return newFailResponse(err)
+func Fail(c *gin.Context, err *global.CustomError) {
+	c.JSON(err.HTTPStatus, newFailResponse(err))
 }

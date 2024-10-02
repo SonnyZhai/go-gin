@@ -31,13 +31,17 @@ func setupRouter() *gin.Engine {
 	apiPrefix := global.App.Config.Api.Prefix
 	apiVersion := global.App.Config.Api.Version
 
-	// 注册api分组路由
+	// 注册api分组路由，包括测试接口和优雅关机接口
 	apiGroup := router.Group(apiPrefix + cons.SLASH + apiVersion)
 	routes.SetApiGroupRoutes(apiGroup)
 
-	// 注册用户分组路由
+	// 注册用户分组路由，包括注册和登录接口
 	userGroup := router.Group(apiPrefix + cons.SLASH + apiVersion + cons.SLASH + cons.API_USER_GROUP)
 	routes.SetUserGroupRoutes(userGroup)
+
+	// 注册需要认证才能访问的接口
+	authGroup := router.Group(apiPrefix + cons.SLASH + apiVersion + cons.SLASH + cons.API_AUTH_GROUP)
+	routes.SetAuthGroupRoutes(authGroup)
 
 	return router
 }

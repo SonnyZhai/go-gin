@@ -39,3 +39,7 @@ log_filename = "postgresql.log"
 [api]
 prefix = "/api"
 version = "v1"
+
+[jwt]
+secret = "3Bde3BGEbYqtqyEUzW3ry8jKFcaPH17fRmTmqE7MDr05Lwj95uruRKrrkb44TJ4s"
+jwt_ttl = 43200

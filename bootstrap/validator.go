@@ -16,6 +16,7 @@ func InitializeValidator() {
 		// 注册自定义验证器
 		v.RegisterValidation("mobile", utils.ValidateMobile)
 		v.RegisterValidation("email", utils.ValidateEmail)
+		v.RegisterValidation("customValidatorUsername", utils.CustomValidatorUsername)
 
 		// 注册自定义 json tag 函数
 		v.RegisterTagNameFunc(func(fld reflect.StructField) string {
