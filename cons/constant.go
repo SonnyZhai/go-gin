@@ -14,25 +14,33 @@ const (
 	TOML_TYPE   = "toml"        // TOML 配置文件类型
 	JSON_TYPE   = "json"        // JSON 配置文件类型
 
+	// API相关
+	API_USER_GROUP = "user" // 用户分组
+	API_MESSAGE    = "message"
+	API_SUCCESS    = "success"
+	API_ERROR      = "error"
+
 	// 符号名称
-	COLON                = ":"  // 冒号
-	LEFT_ROUND_BRACKET   = "("  // 左括号
-	RIGHT_ROUND_BRACKET  = ")"  // 右括号
-	LEFT_SQUARE_BRACKET  = "["  // 左方括号
-	RIGHT_SQUARE_BRACKET = "]"  // 右方括号
-	LEFT_BRACE           = "{"  // 左大括号
-	RIGHT_BRACE          = "}"  // 右大括号
-	QUESTION_MARK        = "?"  // 问号
-	COMMA                = ","  // 逗号
-	SEMICOLON            = ";"  // 分号
-	PERCENT              = "%"  // 百分号
-	ASTERISK             = "*"  // 星号
-	EXCLAMATION          = "!"  // 感叹号
-	SLASH                = "/"  // 斜杠
-	DOT                  = "."  // 点
-	EQUAL                = "="  // 等号
-	AND                  = "&"  // 与
-	STRING_PLACEHOLDER   = "%s" // 字符串占位符
+	COLON                = ":"    // 冒号
+	LEFT_ROUND_BRACKET   = "("    // 左括号
+	RIGHT_ROUND_BRACKET  = ")"    // 右括号
+	LEFT_SQUARE_BRACKET  = "["    // 左方括号
+	RIGHT_SQUARE_BRACKET = "]"    // 右方括号
+	LEFT_BRACE           = "{"    // 左大括号
+	RIGHT_BRACE          = "}"    // 右大括号
+	QUESTION_MARK        = "?"    // 问号
+	COMMA                = ","    // 逗号
+	SEMICOLON            = "; "   // 分号
+	PERCENT              = "%"    // 百分号
+	ASTERISK             = "*"    // 星号
+	EXCLAMATION          = "!"    // 感叹号
+	SLASH                = "/"    // 斜杠
+	DOT                  = "."    // 点
+	EQUAL                = "="    // 等号
+	AND                  = "&"    // 与
+	STRING_PLACEHOLDER   = "%s"   // 字符串占位符
+	STRING_PLACEHOLDER_N = "%s\n" // 字符串占位符（换行）
+	NUMBER_PLACEHOLDER   = "%d"   // 数字占位符
 
 	// 日期时间格式
 	DateTimeFormat = "2006-01-02 15:04:05.000"
@@ -58,6 +66,8 @@ const (
 	DATABASE_MYSQL_PARAMS            = "&parseTime=true&loc=Local"
 
 	// 致命信息输出相关
+	FATAL_SERVER_START     = "服务器启动失败: "
+	FATAL_SERVER_SHUTDOWN  = "服务器关闭失败: "
 	FATAL_READ_CONFIG      = "读取配置文件失败: "
 	FATAL_CONFIG_TO_GLOBAL = "配置赋值给全局变量失败: "
 	FATAL_DB_CONNECT       = "数据库连接失败: "
@@ -72,11 +82,15 @@ const (
 	ERROR_RELOAD_CONFIG       = "重新加载配置文件失败: "
 	ERROR_DB_TYPE_UNSUPPORT   = "不支持的数据库类型: "
 	ERROR_DB_MIGRATE          = "数据库迁移失败: "
+	ERROR_DEFAULT_REQUEST     = "参数错误"
 
 	// 信息打印相关
-	INFO_READ_CONFIG      = "读取配置文件成功: "
-	INFO_MODIFY_CONFIG    = "配置文件已修改并重新加载: "
-	INFO_RELOAD_CONFIG    = "重新加载配置文件成功: "
-	INFO_DB_CONNECT       = "数据库连接成功"
-	INFO_LOG_INIT_SUCCESS = "日志初始化成功"
+	INFO_SERVER_START       = "服务器启动成功，端口: "
+	INFO_SERVER_IN_SHUTDOWN = "接收到关闭信号，服务器正在关闭..."
+	INFO_SERVER_SHUTDOWN    = "服务器已关闭"
+	INFO_READ_CONFIG        = "读取配置文件成功: "
+	INFO_MODIFY_CONFIG      = "配置文件已修改并重新加载: "
+	INFO_RELOAD_CONFIG      = "重新加载配置文件成功: "
+	INFO_DB_CONNECT         = "数据库连接成功"
+	INFO_LOG_INIT_SUCCESS   = "日志初始化成功"
 )

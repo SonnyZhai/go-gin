@@ -2,6 +2,7 @@ package config
 
 type Configuration struct {
 	App        App        `mapstructure:"app" json:"app" yaml:"app"`
+	Api        Api        `mapstructure:"api" json:"api" yaml:"api"`
 	Log        Log        `mapstructure:"log" json:"log" yaml:"log"`
 	Database   string     `mapstructure:"database" json:"database" yaml:"database"`
 	MysqlDB    MysqlDB    `mapstructure:"mysql" json:"mysql" yaml:"mysql"`

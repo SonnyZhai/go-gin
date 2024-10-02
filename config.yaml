@@ -6,6 +6,10 @@ app: # 应用基本配置
     name: prod # 环境名称
     debug: false # 是否开启调试模式
 
+api:
+  prefix: /api
+  version: v1
+
 log:
   level: info # 日志等级
   root_dir: ./storage/logs # 日志根目录

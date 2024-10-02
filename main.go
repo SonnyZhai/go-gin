@@ -4,9 +4,6 @@ import (
 	"go-gin/bootstrap"
 	"go-gin/cons"
 	"go-gin/global"
-	"strconv"
-
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -28,17 +25,10 @@ func main() {
 		}
 	}()
 
-	// 创建一个默认的路由引擎
-	r := gin.Default()
-
-	// 测试GET请求
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello, Gin!",
-		})
-	})
+	// 初始化验证器
+	bootstrap.InitializeValidator()
 
 	// 启动服务
-	r.Run(cons.COLON + strconv.Itoa(global.App.Config.App.Port))
+	bootstrap.RunServer()
 
 }

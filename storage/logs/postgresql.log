@@ -1,9 +1,0 @@
-
-2024/10/01 02:47:11 [32mD:/Project/go-project/go-gin/bootstrap/db.go:183 [33mSLOW SQL >= 200ms
-[0m[31;1m[518.576ms] [33m[rows:1][35m SELECT count(*) FROM information_schema.tables WHERE table_schema = CURRENT_SCHEMA() AND table_name = 't_user' AND table_type = 'BASE TABLE'[0m
-
-2024/10/01 02:47:11 [32mD:/Project/go-project/go-gin/bootstrap/db.go:183
-[0m[33m[188.443ms] [34;1m[rows:0][0m CREATE TABLE "t_user" ("id" bigserial,"username" varchar(20) NOT NULL,"password" varchar(100) NOT NULL,"mobile" varchar(11) NOT NULL,"email" varchar(100) NOT NULL,"created_at" timestamptz,"updated_at" timestamptz,"deleted_at" timestamptz,PRIMARY KEY ("id"),CONSTRAINT "uni_t_user_email" UNIQUE ("email"),CONSTRAINT "uni_t_user_username" UNIQUE ("username"),CONSTRAINT "uni_t_user_mobile" UNIQUE ("mobile"))
-
-2024/10/01 02:47:12 [32mD:/Project/go-project/go-gin/bootstrap/db.go:183
-[0m[33m[177.086ms] [34;1m[rows:0][0m CREATE INDEX IF NOT EXISTS "idx_t_user_deleted_at" ON "t_user" ("deleted_at")

@@ -45,3 +45,5 @@ _testmain.go
 /test/times.out
 
 /.vscode
+
+/storage/logs/*

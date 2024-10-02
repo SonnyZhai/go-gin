@@ -35,3 +35,7 @@ max_open_conns = 100
 log_mode = "info"
 enable_file_log_writer = true
 log_filename = "postgresql.log"
+
+[api]
+prefix = "/api"
+version = "v1"
