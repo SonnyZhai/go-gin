@@ -69,6 +69,7 @@ const (
 	ERROR_CODE_BUSINESS_INVALID_PARAMS   ErrorCode = 20000 + iota // 无效参数
 	ERROR_CODE_BUSINESS_INVALID_METHOD                            // 无效方法
 	ERROR_CODE_BUSINESS_INVALID_TOKEN                             // 无效令牌
+	ERROR_CODE_BUSINESS_INVALID_GUARD                             // 无效守卫
 	ERROR_CODE_BUSINESS_INVALID_SESSION                           // 无效会话
 	ERROR_CODE_BUSINESS_INVALID_URL                               // 无效 URL
 	ERROR_CODE_BUSINESS_INVALID_FILE                              // 无效文件

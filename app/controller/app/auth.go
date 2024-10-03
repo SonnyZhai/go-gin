@@ -43,7 +43,7 @@ func Login(c *gin.Context) {
 }
 
 func GetUserInfo(c *gin.Context) {
-	user, err := services.UserService.GetUserInfoByToken(c.Keys[cons.API_USER_ID].(string))
+	user, err := services.UserService.GetUserInfo(c.Keys[cons.API_USER_ID].(string))
 	if err != nil {
 		errors.HandleErrorWithContext(c, http.StatusBadRequest, cons.ERROR_CODE_SERVER_USER_OPERATION_FAILED, err.Error(), err, map[string]interface{}{
 			cons.API_ERROR: err.Error(),
