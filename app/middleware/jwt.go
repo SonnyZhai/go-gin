@@ -6,8 +6,8 @@ import (
 	"go-gin/errors"
 	"go-gin/global"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func JWTAuth(GuardName string) gin.HandlerFunc {
@@ -26,7 +26,8 @@ func JWTAuth(GuardName string) gin.HandlerFunc {
 		token, err := jwt.ParseWithClaims(tokenStr, &services.CustomClaims{}, func(token *jwt.Token) (interface{}, error) {
 			return []byte(global.App.Config.Jwt.Secret), nil
 		})
-		if err != nil {
+		// Token 校验失败，或者 token 在黑名单中
+		if err != nil || services.JwtService.IsInBlacklist(tokenStr) {
 			errors.HandleErrorWithContext(c, 401, cons.ERROR_CODE_SERVER_USER_INVALID_TOKEN, cons.ERROR_CLAIMS_TOKEN, nil, nil)
 			c.Abort()
 			return
@@ -43,6 +44,6 @@ func JWTAuth(GuardName string) gin.HandlerFunc {
 
 		// 存储 token 和用户 ID
 		c.Set(cons.API_TOKEN_NAME, token)
-		c.Set(cons.API_USER_ID, claims.Id)
+		c.Set(cons.API_USER_ID, claims.ID)
 	}
 }
