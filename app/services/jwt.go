@@ -1,6 +1,8 @@
 package services
 
 import (
+	"context"
+	"errors"
 	"go-gin/cons"
 	"go-gin/global"
 	"go-gin/utils"
@@ -78,14 +80,14 @@ func (jwtService *jwtService) JoinBlackList(token *jwt.Token) (err error) {
 	expiresAt := token.Claims.(*CustomClaims).ExpiresAt.Unix()
 	timer := time.Duration(expiresAt-nowUnix) * time.Second
 	//将当前时间作为缓存 value 值，将 token 剩余时间设置为缓存有效期，这样就可以保证 token 在缓存中的有效期和 token 的有效期一致
-	err = global.App.Redis.SetNX(jwtService.getBlackListKey(token.Raw), nowUnix, timer).Err()
+	err = global.App.Redis.SetNX(context.Background(), jwtService.getBlackListKey(token.Raw), nowUnix, timer).Err()
 	return
 }
 
 // IsInBlacklist token 是否在黑名单中
 func (jwtService *jwtService) IsInBlacklist(tokenStr string) bool {
 	// 从 Redis 获取黑名单信息：如果获取到了，说明 token 在黑名单中
-	joinUnixStr, err := global.App.Redis.Get(jwtService.getBlackListKey(tokenStr)).Result()
+	joinUnixStr, err := global.App.Redis.Get(context.Background(), jwtService.getBlackListKey(tokenStr)).Result()
 	if err != nil {
 		// 如果获取 Redis 值时出错，返回 false
 		return false
@@ -100,4 +102,15 @@ func (jwtService *jwtService) IsInBlacklist(tokenStr string) bool {
 		return false
 	}
 	return true
+}
+
+// 根据不同客户端 token ，查询不同用户表数据
+func (jwtService *jwtService) GetUserInfo(GuardName string, id string) (user JwtUser, err error) {
+	switch GuardName {
+	case AppGuardName:
+		return UserService.GetUserInfo(id)
+	default:
+		err = errors.New(cons.ERROR_TOKEN_GUARD_NAME + GuardName)
+	}
+	return
 }

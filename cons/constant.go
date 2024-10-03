@@ -15,15 +15,17 @@ const (
 	JSON_TYPE   = "json"        // JSON 配置文件类型
 
 	// API相关
-	API_USER_GROUP = "user" // 用户分组
-	API_USER_ID    = "id"
-	API_AUTH_GROUP = "auth" // 需要认证的分组
-	API_MESSAGE    = "message"
-	API_SUCCESS    = "Success"
-	API_FAILED     = "Failed"
-	API_ERROR      = "error"
-	API_AUTH_NAME  = "Authorization"
-	API_TOKEN_NAME = "token"
+	API_USER_GROUP           = "user" // 用户分组
+	API_USER_ID              = "id"
+	API_AUTH_GROUP           = "auth" // 需要认证的分组
+	API_MESSAGE              = "message"
+	API_SUCCESS              = "Success"
+	API_FAILED               = "Failed"
+	API_ERROR                = "error"
+	API_AUTH_NAME            = "Authorization"
+	API_TOKEN_NAME           = "token"
+	API_REFRESH_TOKEN        = "refresh_token"
+	API_REFRESH_TOKEN_EXPIRE = "refresh_token_expire"
 
 	// 符号名称
 	COLON                = ":"    // 冒号
@@ -72,7 +74,8 @@ const (
 	DATABASE_MYSQL_PARAMS            = "&parseTime=true&loc=Local"
 
 	// redis 相关
-	JWT_BLACK_LIST = "jwt_black_list"
+	JWT_BLACK_LIST     = "jwt_black_list"
+	REFRESH_TOKEN_LOCK = "refresh_token_lock"
 
 	// 致命信息输出相关
 	FATAL_SERVER_START     = "服务器启动失败: "
@@ -95,16 +98,17 @@ const (
 	ERROR_DEFAULT_REQUEST     = "参数错误"
 
 	// 用户错误业务逻辑相关
-	ERROR_USERNAME_EXIST  = "用户名已存在"
-	ERROR_MOBILE_EXIST    = "手机号已存在"
-	ERROR_EMAIL_EXIST     = "邮箱已存在"
-	ERROR_INVALID_USER_ID = "无效的用户ID"
-	ERROR_USER_NOT_EXIST  = "用户不存在"
-	ERROR_REGISTER_FAILED = "数据库异常，注册失败"
-	ERROR_EMPTY_TOKEN     = "token为空, 请登录后访问"
-	ERROR_CLAIMS_TOKEN    = "token是无效的, 请重新登录"
-	ERROR_INVALID_ISSUER  = "token是错误的, 请重新登录"
-	ERROR_LOGIN_FAILED    = "用户不存在或用户名密码错误"
+	ERROR_USERNAME_EXIST   = "用户名已存在"
+	ERROR_MOBILE_EXIST     = "手机号已存在"
+	ERROR_EMAIL_EXIST      = "邮箱已存在"
+	ERROR_INVALID_USER_ID  = "无效的用户ID"
+	ERROR_USER_NOT_EXIST   = "用户不存在"
+	ERROR_REGISTER_FAILED  = "数据库异常，注册失败"
+	ERROR_EMPTY_TOKEN      = "token为空, 请登录后访问"
+	ERROR_CLAIMS_TOKEN     = "token是无效的, 请重新登录"
+	ERROR_INVALID_ISSUER   = "token是错误的, 请重新登录"
+	ERROR_LOGIN_FAILED     = "用户不存在或用户名密码错误"
+	ERROR_TOKEN_GUARD_NAME = "token中的守卫名称错误: "
 
 	// 信息打印相关
 	INFO_SERVER_START       = "服务器启动成功，端口: "

@@ -69,7 +69,7 @@ func (u *userService) Login(params request.Login) (user models.User, err error) 
 }
 
 // GetUserInfo 获取用户信息
-func (u *userService) GetUserInfoByToken(id string) (user models.User, err error) {
+func (u *userService) GetUserInfo(id string) (user models.User, err error) {
 	intId, convErr := strconv.Atoi(id)
 	if convErr != nil {
 		return user, errors.New(cons.ERROR_INVALID_USER_ID)
