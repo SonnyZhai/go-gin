@@ -3,6 +3,7 @@ package global
 import (
 	"go-gin/config"
 
+	"github.com/go-redis/redis"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
@@ -18,6 +19,8 @@ type Application struct {
 	Log *zap.Logger
 	// DB 用来存放 gorm.DB 实例
 	DB *gorm.DB
+	// Redis 用来存放 redis.Client 实例
+	Redis *redis.Client
 }
 
 var App = new(Application)

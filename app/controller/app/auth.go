@@ -9,6 +9,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golang-jwt/jwt/v4"
 )
 
 func Login(c *gin.Context) {
@@ -30,7 +31,7 @@ func Login(c *gin.Context) {
 		})
 		return
 	} else {
-		tokenData, err, _ := services.JwtService.CreateToken(services.AppGuardName, user)
+		tokenData, _, err := services.JwtService.CreateToken(services.AppGuardName, user)
 		if err != nil {
 			errors.HandleErrorWithContext(c, http.StatusBadRequest, cons.ERROR_CODE_SERVER_USER_FAILED_TOKEN, err.Error(), err, map[string]interface{}{
 				cons.API_ERROR: err.Error(),
@@ -50,4 +51,16 @@ func GetUserInfo(c *gin.Context) {
 		return
 	}
 	response.Success(c, user)
+}
+
+func Logout(c *gin.Context) {
+	// 将 token 加入黑名单, 使其失效
+	err := services.JwtService.JoinBlackList(c.Keys[cons.API_TOKEN_NAME].(*jwt.Token))
+	if err != nil {
+		errors.HandleErrorWithContext(c, http.StatusBadRequest, cons.ERROR_CODE_SERVER_USER_OPERATION_FAILED, err.Error(), err, map[string]interface{}{
+			cons.API_ERROR: err.Error(),
+		})
+		return
+	}
+	response.Success(c, nil)
 }

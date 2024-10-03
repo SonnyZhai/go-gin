@@ -71,6 +71,9 @@ const (
 	DATABASE_POSTGRESQL_TABLE_PREFIX = "t_"
 	DATABASE_MYSQL_PARAMS            = "&parseTime=true&loc=Local"
 
+	// redis 相关
+	JWT_BLACK_LIST = "jwt_black_list"
+
 	// 致命信息输出相关
 	FATAL_SERVER_START     = "服务器启动失败: "
 	FATAL_SERVER_SHUTDOWN  = "服务器关闭失败: "
@@ -83,6 +86,7 @@ const (
 	// 错误信息输出相关
 	ERROR_MYSQL_DB_CONNECT    = "Mysql数据库连接失败: "
 	ERROR_POSTGRES_DB_CONNECT = "Postgres数据库连接失败: "
+	ERROR_REDIS_CONNECTION    = "Redis连接失败: "
 	ERROR_DB_CONFIG_DBNAME    = "数据库名称为空，连接失败"
 	ERROR_READ_CONFIG         = "读取配置文件失败: "
 	ERROR_RELOAD_CONFIG       = "重新加载配置文件失败: "

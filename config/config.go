@@ -8,4 +8,5 @@ type Configuration struct {
 	MysqlDB    MysqlDB    `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	PostgresDB PostgresDB `mapstructure:"postgresql" json:"postgresql" yaml:"postgresql"`
 	Jwt        Jwt        `mapstructure:"jwt" json:"jwt" yaml:"jwt"`
+	Redis      Redis      `mapstructure:"redis" json:"redis" yaml:"redis"`
 }
