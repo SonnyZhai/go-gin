@@ -73,18 +73,33 @@ const (
 	DATABASE_POSTGRESQL_TABLE_PREFIX = "t_"
 	DATABASE_MYSQL_PARAMS            = "&parseTime=true&loc=Local"
 
+	// OSS 相关
+	OSS_R2_NAME = "r2"
+
+	// ETCD 相关
+	ETCD_VERSION     = "etcd3"
+	ETCD_ENV_ADDR    = "ETCD_ADDR"
+	ETCD_CONFIG_PATH = "/v3/config/storage/r2"
+
 	// redis 相关
 	JWT_BLACK_LIST     = "jwt_black_list"
 	REFRESH_TOKEN_LOCK = "refresh_token_lock"
 
 	// 致命信息输出相关
-	FATAL_SERVER_START     = "服务器启动失败: "
-	FATAL_SERVER_SHUTDOWN  = "服务器关闭失败: "
-	FATAL_READ_CONFIG      = "读取配置文件失败: "
-	FATAL_CONFIG_TO_GLOBAL = "配置赋值给全局变量失败: "
-	FATAL_DB_CONNECT       = "数据库连接失败: "
-	FATAL_DECODE_POSTGRES  = "解码PostgreSQL配置失败: "
-	FATAL_DECODE_MYSQL     = "解码MySQL配置失败: "
+	FATAL_SERVER_START          = "服务器启动失败: "
+	FATAL_SERVER_SHUTDOWN       = "服务器关闭失败: "
+	FATAL_READ_CONFIG           = "读取配置文件失败: "
+	FATAL_CONFIG_TO_GLOBAL      = "配置赋值给全局变量失败: "
+	FATAL_DB_CONNECT            = "数据库连接失败: "
+	FATAL_DECODE_POSTGRES       = "解码PostgreSQL配置失败: "
+	FATAL_DECODE_MYSQL          = "解码MySQL配置失败: "
+	FATAL_READ_ETCD_CONFIG      = "读取etcd配置失败: "
+	FATAL_RELOAD_ETCD_CONFIG    = "重新加载etcd配置失败: "
+	FATAL_ETCD_ADDR_PROVIDER    = "etcd配置地址为空: "
+	FATAL_ADD_REMOTE_PROVIDER   = "添加远程配置提供者失败: "
+	FATAL_READ_REMOTE_CONFIG    = "读取远程配置失败: "
+	FATAL_REMOTE_VALUE_TO_CONF  = "远程配置赋值给全局变量失败: "
+	FATAL_ETCD_CONFIG_TO_GLOBAL = "etcd配置赋值给全局变量失败: "
 
 	// 错误信息输出相关
 	ERROR_MYSQL_DB_CONNECT    = "Mysql数据库连接失败: "
