@@ -41,6 +41,8 @@ func InitializeDB() *gorm.DB {
 		global.App.Log.Fatal(cons.FATAL_DB_CONNECT, zap.Any("err", err))
 	}
 
+	log.Printf(cons.INFO_DB_CONNECT)
+
 	return db
 }
 
@@ -182,6 +184,7 @@ func initTable(db *gorm.DB) {
 	// 自动迁移
 	err := db.AutoMigrate(
 		models.User{},
+		models.Media{},
 	)
 	if err != nil {
 		global.App.Log.Error(cons.ERROR_DB_MIGRATE, zap.Any("err", err))

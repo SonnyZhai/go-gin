@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"go-gin/cons"
 	"go-gin/global"
 	"log"
@@ -114,8 +113,6 @@ func configByEtcd(v *viper.Viper) {
 	if err = v.UnmarshalKey(cons.OSS_R2_NAME, &global.App.Config.Etcd); err != nil {
 		log.Fatal(cons.FATAL_REMOTE_VALUE_TO_CONF, err)
 	}
-
-	fmt.Println(global.App.Config)
 }
 
 // 监听本地配置文件变化

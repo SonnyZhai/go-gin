@@ -4,6 +4,7 @@ import (
 	"context"
 	"go-gin/cons"
 	"go-gin/global"
+	"log"
 	"strconv"
 
 	"github.com/go-redis/redis/v8"
@@ -21,5 +22,6 @@ func InitializeRedis() *redis.Client {
 		global.App.Log.Error(cons.ERROR_REDIS_CONNECTION, zap.Any("err", err))
 		return nil
 	}
+	log.Printf(cons.INFO_REDIS_CONNECTION)
 	return client
 }

@@ -31,6 +31,9 @@ func main() {
 	// 初始化 Redis
 	global.App.Redis = bootstrap.InitializeRedis()
 
+	// 初始化 S3
+	global.App.S3 = bootstrap.InitializeS3()
+
 	// 启动服务
 	bootstrap.RunServer()
 

@@ -74,7 +74,9 @@ const (
 	DATABASE_MYSQL_PARAMS            = "&parseTime=true&loc=Local"
 
 	// OSS 相关
-	OSS_R2_NAME = "r2"
+	OSS_R2_NAME        = "r2"
+	OSS_R2_REGION      = "auto"
+	OSS_R2_BUCKET_NAME = "go-gin"
 
 	// ETCD 相关
 	ETCD_VERSION      = "etcd3"
@@ -107,11 +109,13 @@ const (
 	FATAL_PARSE_REMOTE_CONFIG     = "解析远程配置失败: "
 	FATAL_GET_NEW_REMOTE_CONFIG   = "获取最新的远程配置失败: "
 	FATAL_PARSE_NEW_REMOTE_CONFIG = "解析最新的远程配置失败: "
+	FATAL_LOAD_R2_CONFIG          = "加载r2的配置文件失败"
 
 	// 错误信息输出相关
 	ERROR_MYSQL_DB_CONNECT    = "Mysql数据库连接失败: "
 	ERROR_POSTGRES_DB_CONNECT = "Postgres数据库连接失败: "
 	ERROR_REDIS_CONNECTION    = "Redis连接失败: "
+	ERROR_S3_CONNECTION       = "S3连接失败: "
 	ERROR_DB_CONFIG_DBNAME    = "数据库名称为空，连接失败"
 	ERROR_READ_CONFIG         = "读取配置文件失败: "
 	ERROR_RELOAD_CONFIG       = "重新加载配置文件失败: "
@@ -140,6 +144,8 @@ const (
 	INFO_MODIFY_CONFIG             = "配置文件已修改并重新加载: "
 	INFO_RELOAD_CONFIG             = "重新加载配置文件成功: "
 	INFO_DB_CONNECT                = "数据库连接成功"
+	INFO_REDIS_CONNECTION          = "Redis连接成功"
+	INFO_S3_CONNECTION             = "S3连接成功"
 	INFO_LOG_INIT_SUCCESS          = "日志初始化成功"
 	INFO_START_WATCH_REMOTE_CONFIG = "开始监听远程配置文件..."
 	INFO_CONFIG_CHANGED            = "配置文件发生了变化: "
