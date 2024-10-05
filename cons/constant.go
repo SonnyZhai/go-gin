@@ -122,6 +122,7 @@ const (
 	ERROR_DB_TYPE_UNSUPPORT   = "不支持的数据库类型: "
 	ERROR_DB_MIGRATE          = "数据库迁移失败: "
 	ERROR_DEFAULT_REQUEST     = "参数错误"
+	ERROR_CHECK_CREATE_BUCKET = "检查或创建存储桶失败"
 
 	// 用户错误业务逻辑相关
 	ERROR_USERNAME_EXIST   = "用户名已存在"
@@ -137,15 +138,16 @@ const (
 	ERROR_TOKEN_GUARD_NAME = "token中的守卫名称错误: "
 
 	// 信息打印相关
+	INFO_CONFIG_INIT_SUCCESS       = "配置文件初始化成功..."
 	INFO_SERVER_START              = "服务器启动成功，端口: "
 	INFO_SERVER_IN_SHUTDOWN        = "接收到关闭信号，服务器正在关闭..."
 	INFO_SERVER_SHUTDOWN           = "服务器已关闭"
 	INFO_READ_CONFIG               = "读取配置文件成功: "
 	INFO_MODIFY_CONFIG             = "配置文件已修改并重新加载: "
 	INFO_RELOAD_CONFIG             = "重新加载配置文件成功: "
-	INFO_DB_CONNECT                = "数据库连接成功"
-	INFO_REDIS_CONNECTION          = "Redis连接成功"
-	INFO_S3_CONNECTION             = "S3连接成功"
+	INFO_DB_CONNECT                = "数据库连接成功..."
+	INFO_REDIS_CONNECTION          = "Redis连接成功..."
+	INFO_S3_CONNECTION             = "S3连接成功..."
 	INFO_LOG_INIT_SUCCESS          = "日志初始化成功"
 	INFO_START_WATCH_REMOTE_CONFIG = "开始监听远程配置文件..."
 	INFO_CONFIG_CHANGED            = "配置文件发生了变化: "

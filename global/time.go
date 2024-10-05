@@ -35,10 +35,10 @@ func (t Time) String() string {
 }
 
 // local 返回本地时间
-func (t Time) local() time.Time {
-	loc, _ := time.LoadLocation(cons.TIMEZONE)
-	return time.Time(t).In(loc)
-}
+// func (t Time) local() time.Time {
+// 	loc, _ := time.LoadLocation(cons.TIMEZONE)
+// 	return time.Time(t).In(loc)
+// }
 
 // Value 实现 driver.Valuer 接口
 func (t Time) Value() (driver.Value, error) {

@@ -27,12 +27,10 @@ func InitializeS3() *s3.Client {
 		return nil
 	}
 
-	log.Printf(cons.INFO_S3_CONNECTION)
-
 	// 检查并创建存储桶
 	err = checkAndCreateBucket(r2, cons.OSS_R2_BUCKET_NAME, cons.OSS_R2_REGION)
 	if err != nil {
-		global.App.Log.Error("Failed to check or create bucket", zap.Any("err", err))
+		global.App.Log.Error(cons.ERROR_CHECK_CREATE_BUCKET, zap.Any("err", err))
 	}
 
 	return r2
@@ -51,7 +49,7 @@ func ConnectToS3(endpoint, accessKey, secretAccessKey string) (*s3.Client, error
 	)
 
 	if err != nil {
-		log.Fatalf(cons.FATAL_LOAD_R2_CONFIG+cons.STRING_PLACEHOLDER, err)
+		global.App.Log.Fatal(cons.FATAL_LOAD_R2_CONFIG+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 		return nil, err
 	}
 
@@ -78,14 +76,14 @@ func checkAndCreateBucket(client *s3.Client, bucketName, region string) error {
 		})
 
 		if err != nil {
-			log.Printf("Couldn't create bucket %v in Region %v. Here's why: %v\n",
+			log.Printf("在地区 %v ，创建桶失败 %v . 原因是：: %v\n",
 				bucketName, region, err)
 			return err
 		}
 
-		log.Printf("Bucket %v created successfully in Region %v.\n", bucketName, region)
+		log.Printf("存储桶 %v 创建成功， 地区为： %v.\n", bucketName, region)
 	} else {
-		log.Printf("Bucket %v already exists.\n", bucketName)
+		log.Printf("存储桶 %v 已经存在.\n", bucketName)
 	}
 
 	return nil

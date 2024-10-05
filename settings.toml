@@ -10,7 +10,7 @@ name = "development"
 debug = true
 
 [log]
-level = "debug"
+level = "info"
 root_dir = "./storage/logs"
 filename = "app.log"
 format = "json"

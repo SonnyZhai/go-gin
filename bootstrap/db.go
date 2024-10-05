@@ -33,15 +33,13 @@ func InitializeDB() *gorm.DB {
 	case cons.DATABASE_TYPE_POSTGRESQL:
 		db, err = initPostgresGorm()
 	default:
-		global.App.Log.Fatal(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, zap.String("dbType", global.App.Config.Database))
+		global.App.Log.Fatal(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, zap.String("数据库类型", global.App.Config.Database))
 	}
 
 	// 如果有错误则输出错误信息
 	if err != nil {
 		global.App.Log.Fatal(cons.FATAL_DB_CONNECT, zap.Any("err", err))
 	}
-
-	log.Printf(cons.INFO_DB_CONNECT)
 
 	return db
 }
