@@ -5,7 +5,6 @@ import (
 	"context"
 	"go-gin/cons"
 	"go-gin/global"
-	"log"
 	"os"
 	"time"
 
@@ -13,6 +12,7 @@ import (
 	"github.com/spf13/viper"
 	_ "github.com/spf13/viper/remote"
 	clientv3 "go.etcd.io/etcd/client/v3"
+	"go.uber.org/zap"
 )
 
 func InitializeConfig() *viper.Viper {
@@ -44,12 +44,12 @@ func InitializeConfig() *viper.Viper {
 
 	// 读取本地配置文件
 	if err := v.ReadInConfig(); err != nil {
-		log.Fatalf(cons.FATAL_READ_CONFIG+cons.STRING_PLACEHOLDER, err)
+		global.App.Log.Fatal(cons.FATAL_READ_CONFIG+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 	}
 
 	// 将本地配置赋值给全局变量
 	if err := v.Unmarshal(&global.App.Config); err != nil {
-		log.Fatalf(cons.FATAL_CONFIG_TO_GLOBAL+cons.STRING_PLACEHOLDER, err)
+		global.App.Log.Fatal(cons.FATAL_CONFIG_TO_GLOBAL+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 	}
 
 	// 加载数据库配置
@@ -70,14 +70,14 @@ func loadDatabaseConfig(v *viper.Viper) {
 	switch global.App.Config.Database {
 	case cons.DATABASE_TYPE_POSTGRESQL:
 		if err := v.UnmarshalKey(cons.DATABASE_TYPE_POSTGRESQL, &global.App.Config.PostgresDB); err != nil {
-			log.Fatalf(cons.FATAL_DECODE_POSTGRES+cons.STRING_PLACEHOLDER, err)
+			global.App.Log.Fatal(cons.FATAL_DECODE_POSTGRES+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 		}
 	case cons.DATABASE_TYPE_MYSQL:
 		if err := v.UnmarshalKey(cons.DATABASE_TYPE_MYSQL, &global.App.Config.MysqlDB); err != nil {
-			log.Fatalf(cons.FATAL_DECODE_MYSQL+cons.STRING_PLACEHOLDER, err)
+			global.App.Log.Fatal(cons.FATAL_DECODE_MYSQL+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 		}
 	default:
-		log.Fatalf(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, global.App.Config.Database)
+		global.App.Log.Fatal(cons.ERROR_DB_TYPE_UNSUPPORT+cons.STRING_PLACEHOLDER, zap.String("数据库类型", global.App.Config.Database))
 	}
 }
 
@@ -95,10 +95,10 @@ func configByEtcd(v *viper.Viper) {
 	// 读取配置
 	resp, err := client.Get(ctx, cons.ETCD_CONFIG_PATH)
 	if err != nil {
-		log.Fatalf(cons.FATAL_READ_REMOTE_CONFIG+cons.STRING_PLACEHOLDER, err)
+		global.App.Log.Fatal(cons.FATAL_READ_REMOTE_CONFIG+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 	}
 	if len(resp.Kvs) == 0 {
-		log.Fatal(cons.FATAL_FOUND_NO_CONFIG)
+		global.App.Log.Fatal(cons.FATAL_FOUND_NO_CONFIG)
 	}
 
 	v.SetConfigType(cons.TOML_TYPE)
@@ -106,12 +106,12 @@ func configByEtcd(v *viper.Viper) {
 	// 读取远程配置
 	err = v.ReadConfig(bytes.NewReader(resp.Kvs[0].Value))
 	if err != nil {
-		log.Fatalf(cons.FATAL_PARSE_REMOTE_CONFIG+cons.STRING_PLACEHOLDER, err)
+		global.App.Log.Fatal(cons.FATAL_PARSE_REMOTE_CONFIG+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 	}
 
 	// 将远程配置赋值给全局变量
 	if err = v.UnmarshalKey(cons.OSS_R2_NAME, &global.App.Config.Etcd); err != nil {
-		log.Fatal(cons.FATAL_REMOTE_VALUE_TO_CONF, err)
+		global.App.Log.Fatal(cons.FATAL_REMOTE_VALUE_TO_CONF, zap.Any("err", err))
 	}
 }
 
@@ -119,10 +119,10 @@ func configByEtcd(v *viper.Viper) {
 func watchLocalConfig(v *viper.Viper) {
 	v.WatchConfig()
 	v.OnConfigChange(func(in fsnotify.Event) {
-		log.Println(cons.INFO_MODIFY_CONFIG, in.Name)
+		global.App.Log.Info(cons.INFO_MODIFY_CONFIG, zap.Any("本地配置文件：", in.Name))
 		// 重新加载配置文件
 		if err := v.Unmarshal(&global.App.Config); err != nil {
-			log.Println(cons.ERROR_RELOAD_CONFIG, err)
+			global.App.Log.Fatal(cons.ERROR_RELOAD_CONFIG, zap.Any("err", err))
 		}
 	})
 }
@@ -135,18 +135,18 @@ func watchRemoteConfig(v *viper.Viper) {
 	defer client.Close()
 
 	for {
-		log.Println(cons.INFO_START_WATCH_REMOTE_CONFIG)
+		global.App.Log.Info(cons.INFO_START_WATCH_REMOTE_CONFIG)
 
 		watchChan := client.Watch(context.Background(), cons.ETCD_CONFIG_PATH, clientv3.WithPrefix())
 
 		for watchResp := range watchChan {
 			for _, event := range watchResp.Events {
-				log.Printf(cons.INFO_CONFIG_CHANGED+cons.STRING_PLACEHOLDER_N, event.Kv.Key)
+				global.App.Log.Info(cons.INFO_CONFIG_CHANGED+cons.STRING_PLACEHOLDER_N, zap.Any("修改的配置：", event.Kv.Key))
 				updateConfig(v, client)
 			}
 		}
 
-		log.Println(cons.INFO_WATCHING_CHANNEL_RESTART)
+		global.App.Log.Info(cons.INFO_WATCHING_CHANNEL_RESTART)
 		// 避免在出错时立即重启
 		time.Sleep(time.Second)
 	}
@@ -160,28 +160,28 @@ func updateConfig(v *viper.Viper, client *clientv3.Client) {
 	// 获取最新的配置
 	resp, err := client.Get(ctx, cons.ETCD_CONFIG_PATH)
 	if err != nil {
-		log.Printf(cons.FATAL_GET_NEW_REMOTE_CONFIG+cons.STRING_PLACEHOLDER_N, err)
+		global.App.Log.Fatal(cons.FATAL_GET_NEW_REMOTE_CONFIG+cons.STRING_PLACEHOLDER_N, zap.Any("err", err))
 		return
 	}
 
 	if len(resp.Kvs) == 0 {
-		log.Println(cons.FATAL_FOUND_NO_CONFIG)
+		global.App.Log.Fatal(cons.FATAL_FOUND_NO_CONFIG)
 		return
 	}
 
 	// 使用 Viper 解析新的配置
 	if err := v.ReadConfig(bytes.NewReader(resp.Kvs[0].Value)); err != nil {
-		log.Printf(cons.FATAL_PARSE_NEW_REMOTE_CONFIG+cons.STRING_PLACEHOLDER_N, err)
+		global.App.Log.Fatal(cons.FATAL_PARSE_NEW_REMOTE_CONFIG+cons.STRING_PLACEHOLDER_N, zap.Any("err", err))
 		return
 	}
 
 	// 更新全局配置
 	if err := v.UnmarshalKey(cons.OSS_R2_NAME, &global.App.Config.Etcd); err != nil {
-		log.Printf(cons.FATAL_ETCD_CONFIG_TO_GLOBAL+cons.STRING_PLACEHOLDER_N, err)
+		global.App.Log.Fatal(cons.FATAL_ETCD_CONFIG_TO_GLOBAL+cons.STRING_PLACEHOLDER_N, zap.Any("err", err))
 		return
 	}
 
-	log.Println(cons.INFO_UPDATE_CONFIG_SUCCESS)
+	global.App.Log.Info(cons.INFO_UPDATE_CONFIG_SUCCESS)
 }
 
 func newEtcdClient() *clientv3.Client {
@@ -190,7 +190,7 @@ func newEtcdClient() *clientv3.Client {
 	etcdPassword := os.Getenv(cons.ETCD_ENV_PASSWORD)
 
 	if etcdAddr == "" {
-		log.Fatal(cons.FATAL_ETCD_ADDR_PROVIDER)
+		global.App.Log.Fatal(cons.FATAL_ETCD_ADDR_PROVIDER)
 	}
 	// 创建 etcd 客户端配置
 	cfg := clientv3.Config{
@@ -206,7 +206,7 @@ func newEtcdClient() *clientv3.Client {
 	// 创建 etcd 客户端
 	client, err := clientv3.New(cfg)
 	if err != nil {
-		log.Fatalf(cons.FATAL_CREATE_ETCD_CLIENT+cons.STRING_PLACEHOLDER, err)
+		global.App.Log.Fatal(cons.FATAL_CREATE_ETCD_CLIENT+cons.STRING_PLACEHOLDER, zap.Any("err", err))
 	}
 
 	return client
