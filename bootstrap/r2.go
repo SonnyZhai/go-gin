@@ -16,7 +16,7 @@ import (
 
 func InitializeS3() *s3.Client {
 	// 连接 S3 服务
-	r2, err := ConnectToS3(
+	r2, err := connectToS3(
 		global.App.Config.Etcd.DefaultEndpoint,
 		global.App.Config.Etcd.AccessKeyId,
 		global.App.Config.Etcd.AccessKeySecret,
@@ -36,8 +36,8 @@ func InitializeS3() *s3.Client {
 	return r2
 }
 
-// ConnectToS3 连接 S3 服务
-func ConnectToS3(endpoint, accessKey, secretAccessKey string) (*s3.Client, error) {
+// connectToS3 连接 S3 服务
+func connectToS3(endpoint, accessKey, secretAccessKey string) (*s3.Client, error) {
 	// 连接 S3 服务
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(

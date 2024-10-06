@@ -182,7 +182,7 @@ func initTable(db *gorm.DB) {
 	// 自动迁移
 	err := db.AutoMigrate(
 		models.User{},
-		models.Media{},
+		models.File{},
 	)
 	if err != nil {
 		global.App.Log.Error(cons.ERROR_DB_MIGRATE, zap.Any("err", err))

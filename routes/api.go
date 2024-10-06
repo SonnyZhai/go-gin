@@ -37,5 +37,6 @@ func SetAuthGroupRoutes(router *gin.RouterGroup) {
 	{
 		authRouter.GET("/userInfo", app.GetUserInfo)
 		authRouter.POST("/logout", app.Logout)
+		authRouter.POST("/uploadImage", app.UploadImage)
 	}
 }
