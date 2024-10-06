@@ -13,6 +13,7 @@ const (
 	YAML_TYPE   = "yaml"        // YAML 配置文件类型
 	TOML_TYPE   = "toml"        // TOML 配置文件类型
 	JSON_TYPE   = "json"        // JSON 配置文件类型
+	FILE_TYPE   = "file"        // 文件配置文件类型
 
 	// API相关
 	API_USER_GROUP           = "user" // 用户分组
@@ -45,6 +46,7 @@ const (
 	DOT                  = "."    // 点
 	EQUAL                = "="    // 等号
 	AND                  = "&"    // 与
+	HYPHEN               = "-"    // 破折号
 	STRING_PLACEHOLDER   = "%s"   // 字符串占位符
 	STRING_PLACEHOLDER_N = "%s\n" // 字符串占位符（换行）
 	NUMBER_PLACEHOLDER   = "%d"   // 数字占位符
@@ -112,17 +114,24 @@ const (
 	FATAL_LOAD_R2_CONFIG          = "加载r2的配置文件失败"
 
 	// 错误信息输出相关
-	ERROR_MYSQL_DB_CONNECT    = "Mysql数据库连接失败: "
-	ERROR_POSTGRES_DB_CONNECT = "Postgres数据库连接失败: "
-	ERROR_REDIS_CONNECTION    = "Redis连接失败: "
-	ERROR_S3_CONNECTION       = "S3连接失败: "
-	ERROR_DB_CONFIG_DBNAME    = "数据库名称为空，连接失败"
-	ERROR_READ_CONFIG         = "读取配置文件失败: "
-	ERROR_RELOAD_CONFIG       = "重新加载配置文件失败: "
-	ERROR_DB_TYPE_UNSUPPORT   = "不支持的数据库类型: "
-	ERROR_DB_MIGRATE          = "数据库迁移失败: "
-	ERROR_DEFAULT_REQUEST     = "参数错误"
-	ERROR_CHECK_CREATE_BUCKET = "检查或创建存储桶失败"
+	ERROR_MYSQL_DB_CONNECT      = "Mysql数据库连接失败: "
+	ERROR_POSTGRES_DB_CONNECT   = "Postgres数据库连接失败: "
+	ERROR_REDIS_CONNECTION      = "Redis连接失败: "
+	ERROR_S3_CONNECTION         = "S3连接失败: "
+	ERROR_DB_CONFIG_DBNAME      = "数据库名称为空，连接失败"
+	ERROR_READ_CONFIG           = "读取配置文件失败: "
+	ERROR_RELOAD_CONFIG         = "重新加载配置文件失败: "
+	ERROR_DB_TYPE_UNSUPPORT     = "不支持的数据库类型: "
+	ERROR_DB_MIGRATE            = "数据库迁移失败: "
+	ERROR_DEFAULT_REQUEST       = "参数错误"
+	ERROR_CHECK_CREATE_BUCKET   = "检查或创建存储桶失败"
+	ERROR_UPLOAD_IMAGE_RECEIVED = "没有接收到上传的图片"
+	ERROR_UPLOAD_IMAGE_SIZE     = "上传的图片大小超过2M"
+	ERROR_UPLOAD_IMAGE_FORMAT   = "上传的图片格式不正确"
+	ERROR_USER_ID_EMPTY         = "未能获取用户信息，请重新登录"
+	ERROR_CREATE_USER_FOLDER    = "创建用户文件夹失败"
+
+	ERROR_UNKNOWN_SERVER_ERROR = "未知的服务器错误"
 
 	// 用户错误业务逻辑相关
 	ERROR_USERNAME_EXIST   = "用户名已存在"
@@ -153,4 +162,5 @@ const (
 	INFO_CONFIG_CHANGED            = "配置文件发生了变化: "
 	INFO_WATCHING_CHANNEL_RESTART  = "监听通道关闭了，重新启动监听..."
 	INFO_UPDATE_CONFIG_SUCCESS     = "更新配置文件成功....."
+	INFO_CREATE_USER_FOLDER        = "创建用户文件夹成功..."
 )

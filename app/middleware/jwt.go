@@ -68,5 +68,17 @@ func JWTAuth(GuardName string) gin.HandlerFunc {
 		// 存储 token 和用户 ID
 		c.Set(cons.API_TOKEN_NAME, token)
 		c.Set(cons.API_USER_ID, claims.ID)
+
+		// 继续执行后续的处理函数
+		c.Next()
 	}
+}
+
+// GetUserID 从 Gin 的上下文中提取用户 ID
+func GetUserID(c *gin.Context) (string, bool) {
+	userID, exists := c.Get(cons.API_USER_ID)
+	if !exists {
+		return "", false
+	}
+	return userID.(string), true
 }
