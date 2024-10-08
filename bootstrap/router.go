@@ -19,7 +19,7 @@ import (
 
 func setupRouter() *gin.Engine {
 	var router = gin.New()
-	router.Use(middleware.GinLogger(), middleware.GinRecovery(false))
+	router.Use(middleware.GinLogger(), middleware.GinRecovery(false), middleware.Cors())
 
 	// 前端项目静态资源
 	// router.StaticFile("/", "./static/dist/index.html")

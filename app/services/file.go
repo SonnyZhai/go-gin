@@ -7,6 +7,7 @@ import (
 	"go-gin/global"
 	"math/rand"
 	"mime/multipart"
+	"strconv"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -34,25 +35,45 @@ func (f *fileService) UploadImages(uploadFile *multipart.FileHeader, uid, ext st
 	ulid := ulid.MustNew(ms, entropy)
 
 	// 生成文件名
-	objectKey := ulid.String() + cons.HYPHEN + uid + ext
+	objectKey := ulid.String() + cons.DOT + ext
 
 	// 打开文件
 	fileContent, err := uploadFile.Open()
 	if err != nil {
 		return file, err
-	}
-	defer fileContent.Close()
-
-	// 上传文件
-	_, err = global.App.S3.PutObject(context.TODO(), &s3.PutObjectInput{
-		Bucket: aws.String(cons.OSS_R2_BUCKET_NAME),
-		Key:    aws.String(uid + cons.SLASH + objectKey),
-		Body:   fileContent,
-	})
-	if err != nil {
-		return file, err
+	} else {
+		defer fileContent.Close()
+		// 上传文件
+		_, err = global.App.S3.PutObject(context.TODO(), &s3.PutObjectInput{
+			Bucket: aws.String(cons.OSS_R2_BUCKET_NAME),
+			Key:    aws.String(uid + cons.SLASH + objectKey),
+			Body:   fileContent,
+		})
+		if err != nil {
+			global.App.Log.Error(cons.ERROR_UPLOAD_IMAGE, zap.Any("err", err))
+			return file, err
+		}
 	}
 	// 保存文件信息到数据库
+	userID, err := strconv.Atoi(uid)
+	if err != nil {
+		global.App.Log.Error(cons.ERROR_UNKNOWN_SERVER_ERROR, zap.Any("err", err))
+		return file, err
+	}
+
+	file = models.File{
+		UserId:   userID,
+		FileType: ext,
+		FileName: objectKey,
+		FileSize: uploadFile.Size,
+		FilePath: cons.OSS_R2_BUCKET_NAME + cons.SLASH + uid,
+	}
+
+	err = global.App.DB.Create(&file).Error
+	if err != nil {
+		global.App.Log.Error(cons.ERROR_UPLOAD_IMAGE, zap.Any("err", err))
+		return file, err
+	}
 
 	return file, nil
 }

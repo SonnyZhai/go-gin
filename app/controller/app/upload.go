@@ -2,6 +2,7 @@ package app
 
 import (
 	"go-gin/app/common/request"
+	"go-gin/app/common/response"
 	"go-gin/app/middleware"
 	"go-gin/app/services"
 	"go-gin/cons"
@@ -36,7 +37,7 @@ func UploadImage(c *gin.Context) {
 	}
 
 	// 检查是否有文件
-	files := formData.File[cons.FILE_TYPE]
+	files := formData.File[cons.IMAGE_TYPE]
 	if len(files) == 0 {
 		errors.HandleErrorWithContext(c, http.StatusBadRequest, cons.ERROR_CODE_BUSINESS_INVALID_IMAGE,
 			cons.ERROR_UPLOAD_IMAGE_RECEIVED, nil, nil)
@@ -62,9 +63,14 @@ func UploadImage(c *gin.Context) {
 		// 保存文件业务逻辑，保存到s3
 		uid := CheckUserFolder(c)
 		file, err := services.FileService.UploadImages(file, uid, ext)
-
+		if err != nil {
+			errors.HandleErrorWithContext(c, http.StatusInternalServerError, cons.ERROR_CODE_SERVER_UNKNOWN,
+				cons.ERROR_UPLOAD_IMAGE, err, nil)
+			return
+		}
+		// 返回文件信息
+		response.Success(c, file)
 	}
-
 }
 
 func CheckUserFolder(c *gin.Context) (uid string) {
