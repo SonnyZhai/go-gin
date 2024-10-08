@@ -14,6 +14,7 @@ const (
 	TOML_TYPE   = "toml"        // TOML 配置文件类型
 	JSON_TYPE   = "json"        // JSON 配置文件类型
 	FILE_TYPE   = "file"        // 文件配置文件类型
+	IMAGE_TYPE  = "image"       // 图片配置文件类型
 
 	// API相关
 	API_USER_GROUP           = "user" // 用户分组
@@ -130,6 +131,7 @@ const (
 	ERROR_UPLOAD_IMAGE_FORMAT   = "上传的图片格式不正确"
 	ERROR_USER_ID_EMPTY         = "未能获取用户信息，请重新登录"
 	ERROR_CREATE_USER_FOLDER    = "创建用户文件夹失败"
+	ERROR_UPLOAD_IMAGE          = "上传图片失败, 请重试"
 
 	ERROR_UNKNOWN_SERVER_ERROR = "未知的服务器错误"
 
