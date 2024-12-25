@@ -1,0 +1,50 @@
+app: # 应用基本配置
+  port: 443 # 应用端口
+  app_name: go-gin # 应用名称
+  app_url: https://www.example.com # 应用域名
+  env:  # 环境配置
+    name: prod # 环境名称
+    debug: false # 是否开启调试模式
+
+api:
+  prefix: /api
+  version: v1
+
+log:
+  level: info # 日志等级
+  root_dir: ./storage/logs # 日志根目录
+  filename: app.log # 日志文件名称
+  format: json # 日志格式
+  show_line: true # 是否显示调用行
+  max_backups: 3 # 旧文件的最大个数
+  max_size: 500 # 日志文件最大大小（MB）
+  max_age: 28 # 旧文件的最大保留天数
+  compress: true # 是否压缩
+
+database: mysql
+
+mysql: # 数据库配置
+  driver: mysql # 数据库驱动
+  host: localhost
+  port: 3306
+  database: go_gin
+  username : root
+  password: 123456
+  charset: utf8mb4 # 编码格式
+  max_idle_conns: 10 # 空闲连接池中连接的最大数量
+  max_open_conns: 100 # 打开数据库连接的最大数量
+  log_mode: info # 日志级别
+  enable_file_log_writer: true # 是否启用日志文件
+  log_filename: mysql.log # 日志文件名称
+
+jwt:
+  secret: 3Bde3BGEbYqtqyEUzW3ry8jKFcaPH17fRmTmqE7MDr05Lwj95uruRKrrkb44TJ4s
+  jwt_ttl: 43200
+  jwt_blacklist_grace_period: 10
+  refresh_grace_period: 1800
+
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  password: 123456
